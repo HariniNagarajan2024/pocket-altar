@@ -9,7 +9,7 @@ import {
   getRecommendedSpells,
 } from "../data/spells";
 import { Sparkles, Play } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useAppStore } from "@/store/useAppStore";
 
 export default function Homepage() {
@@ -18,19 +18,26 @@ export default function Homepage() {
   const user = useAppStore((s) => s.user);
   const activeSession = useAppStore((s) => s.activeSession);
   const castedSpells = useAppStore((s) => s.castedSpells);
-  const moon = getMoonPhase();
-  const affirmation = getDailyAffirmation();
-  const recommended = getRecommendedSpells(3);
-  const dailySpell = recommended[0] ?? spells[0];
+  
+  const moon = useMemo(() => getMoonPhase(), []);
+  const affirmation = useMemo(() => getDailyAffirmation(), []);
+  const recommended = useMemo(() => getRecommendedSpells(3), []);
+  const dailySpell = useMemo(() => recommended[0] ?? spells[0], [recommended]);
 
-  const filteredSpells = selectedCategory
-    ? spells.filter((s) => s.category === selectedCategory)
-    : spells.slice(0, 12);
+  const filteredSpells = useMemo(() => 
+    selectedCategory
+      ? spells.filter((s) => s.category === selectedCategory)
+      : spells.slice(0, 12),
+    [selectedCategory]
+  );
 
   const recentRitual = castedSpells[0];
-  const continueSpell = activeSession
-    ? spells.find((s) => s.id === activeSession.spellId)
-    : null;
+  const continueSpell = useMemo(() =>
+    activeSession
+      ? spells.find((s) => s.id === activeSession.spellId)
+      : null,
+    [activeSession]
+  );
 
   return (
     <div className="min-h-screen pb-28 relative overflow-hidden">

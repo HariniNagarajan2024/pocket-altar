@@ -10,7 +10,7 @@ export async function generateWallpaperImage(options: {
   const canvas = document.createElement("canvas");
   canvas.width = 1080;
   canvas.height = 1920;
-  const ctx = canvas.getContext("2d")!;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
 
   const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
   gradient.addColorStop(0, lighten(options.themeColor, 40));

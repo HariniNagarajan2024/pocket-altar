@@ -1,13 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, lazy, Suspense } from "react";
 import { useNavigate, useParams } from "react-router";
 import { getSpellById } from "@/app/data/spells";
 import { getRitualSteps } from "@/app/data/ritualTemplates";
 import { DeferredParticles } from "../components/DeferredParticles";
-import { RitualExperience } from "../components/ritual/RitualExperience";
+import { MagicalLoader } from "../components/MagicalLoader";
 import { useAppStore } from "@/store/useAppStore";
 import { audioManager, categoryToAmbient } from "@/app/lib/audioManager";
 import { ArrowLeft } from "lucide-react";
 import { motion } from "motion/react";
+
+const RitualExperience = lazy(() => import("../components/ritual/RitualExperience").then(m => ({ default: m.RitualExperience })));
 
 export default function RitualMode() {
   const { id } = useParams();
@@ -75,16 +77,18 @@ export default function RitualMode() {
         </div>
       </div>
 
-      <RitualExperience
-        spell={spell}
-        steps={steps}
-        onComplete={(intention) => {
-          setCurrentIntention(intention);
-          audioManager.playEffect("chime");
-          audioManager.playEffect("seal", 0.8);
-          navigate("/sigil");
-        }}
-      />
+      <Suspense fallback={<MagicalLoader fullScreen label="Preparing ritual..." />}>
+        <RitualExperience
+          spell={spell}
+          steps={steps}
+          onComplete={(intention: string) => {
+            setCurrentIntention(intention);
+            audioManager.playEffect("chime");
+            audioManager.playEffect("seal", 0.8);
+            navigate("/sigil");
+          }}
+        />
+      </Suspense>
     </div>
   );
 }

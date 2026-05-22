@@ -27,8 +27,10 @@ function FloatingParticlesInner({
   const reducedMotion =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  const cappedCount = Math.min(count, reducedMotion ? 0 : count);
+  
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const mobileCount = isMobile ? Math.floor(count * 0.6) : count;
+  const cappedCount = Math.min(mobileCount, reducedMotion ? 0 : count);
 
   const particles = useMemo(() => {
     const Icon = iconMap[type];
@@ -56,7 +58,7 @@ function FloatingParticlesInner({
       {particles.map((particle) => (
         <motion.div
           key={particle.id}
-          className="absolute will-change-transform"
+          className="absolute"
           style={{
             left: `${particle.x}%`,
             top: `${particle.y}%`,

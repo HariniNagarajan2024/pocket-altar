@@ -69,9 +69,9 @@ export default function SigilGeneration() {
         >
           {isGenerating ? (
             <div className="absolute inset-0 flex items-center justify-center">
-              <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}>
+              <div className="animate-spin" style={{ animationDuration: '2s' }}>
                 <RefreshCw size={40} style={{ color: selectedColor.color }} />
-              </motion.div>
+              </div>
             </div>
           ) : (
             <motion.svg viewBox="0 0 100 100" className="w-full h-full">

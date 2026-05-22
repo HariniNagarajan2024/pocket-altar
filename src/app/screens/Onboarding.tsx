@@ -97,6 +97,12 @@ export default function Onboarding() {
     }
   }, [mode, onboardingComplete, navigate]);
 
+  useEffect(() => {
+    setSelectedTheme(storedPrefs.altarTheme);
+    setFavoriteCategories(storedPrefs.favoriteCategories);
+    setAmbientSound(storedPrefs.ambientSound);
+  }, [storedPrefs.altarTheme, storedPrefs.favoriteCategories, storedPrefs.ambientSound]);
+
   const screen = screens[currentScreen];
   const currentData =
     screen?.type === "intro" ? onboardingScreens[screen.index] : null;

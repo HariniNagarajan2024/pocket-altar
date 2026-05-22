@@ -31,10 +31,6 @@ export default function Splash() {
     return () => clearTimeout(timer);
   }, [hydrated, authLoading, navigate, destination, splashMs]);
 
-  if (!hydrated) {
-    return <MagicalLoader fullScreen label="Opening your altar..." />;
-  }
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden bg-gradient-to-b from-[#e8d9f5] via-[#d4b5e8] to-[#f5d0d9]">
       <DeferredParticles type="stars" count={isReturningUser ? 8 : 14} delayMs={300} color="#ffffff" />
