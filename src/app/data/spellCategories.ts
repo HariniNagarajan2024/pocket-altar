@@ -1,0 +1,57 @@
+import type { SpellCategoryId } from "@/app/types";
+
+export const spellCategories: {
+  id: SpellCategoryId;
+  name: string;
+  icon: string;
+  color: string;
+  ambient: string;
+}[] = [
+  { id: "love", name: "Love", icon: "💗", color: "#f5d0d9", ambient: "love" },
+  { id: "confidence", name: "Confidence", icon: "✨", color: "#ffd8bf", ambient: "motivation" },
+  { id: "protection", name: "Protection", icon: "🛡️", color: "#c9dac1", ambient: "protection" },
+  { id: "healing", name: "Healing", icon: "🌸", color: "#f5d0d9", ambient: "healing" },
+  { id: "sleep", name: "Sleep", icon: "🌙", color: "#cce4f7", ambient: "sleep" },
+  { id: "motivation", name: "Motivation", icon: "🔥", color: "#ffd8bf", ambient: "motivation" },
+  { id: "creativity", name: "Creativity", icon: "🎨", color: "#d4b5e8", ambient: "default" },
+  { id: "focus", name: "Study Focus", icon: "📚", color: "#cce4f7", ambient: "focus" },
+  { id: "anxiety", name: "Anxiety Relief", icon: "☁️", color: "#e8d9f5", ambient: "healing" },
+  { id: "productivity", name: "Productivity", icon: "⚡", color: "#fff4cc", ambient: "focus" },
+  { id: "friendship", name: "Friendship", icon: "🤝", color: "#fff4cc", ambient: "love" },
+  { id: "self-worth", name: "Self Worth", icon: "🪞", color: "#f5d0d9", ambient: "healing" },
+  { id: "letting-go", name: "Letting Go", icon: "🕊️", color: "#e8d9f5", ambient: "healing" },
+  { id: "luck", name: "Good Luck", icon: "🍀", color: "#c9dac1", ambient: "default" },
+];
+
+export const dailyAffirmations = [
+  "I am open to the magic that surrounds me",
+  "My heart is soft, my spirit is bright",
+  "I trust the gentle rhythm of my journey",
+  "Today I welcome peace and possibility",
+  "I am worthy of rest, love, and wonder",
+  "My intentions bloom in their own perfect time",
+  "I carry light within me wherever I go",
+];
+
+export function getMoonPhase(): { name: string; icon: string } {
+  const phases = [
+    { name: "New Moon", icon: "🌑" },
+    { name: "Waxing Crescent", icon: "🌒" },
+    { name: "First Quarter", icon: "🌓" },
+    { name: "Waxing Gibbous", icon: "🌔" },
+    { name: "Full Moon", icon: "🌕" },
+    { name: "Waning Gibbous", icon: "🌖" },
+    { name: "Last Quarter", icon: "🌗" },
+    { name: "Waning Crescent", icon: "🌘" },
+  ];
+  const day = Math.floor(
+    (Date.now() - new Date(new Date().getFullYear(), 0, 1).getTime()) /
+      (1000 * 60 * 60 * 24)
+  );
+  return phases[day % phases.length];
+}
+
+export function getDailyAffirmation(): string {
+  const day = new Date().getDate();
+  return dailyAffirmations[day % dailyAffirmations.length];
+}

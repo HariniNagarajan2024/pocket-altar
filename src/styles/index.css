@@ -1,0 +1,103 @@
+@import './fonts.css';
+@import './tailwind.css';
+@import './theme.css';
+
+/* Custom scrollbar styling */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Improve touch drag on mobile */
+[draggable="true"],
+.cursor-grab {
+  touch-action: none;
+}
+
+/* Safe areas for notched devices */
+.safe-top {
+  padding-top: max(0.75rem, env(safe-area-inset-top));
+}
+
+.safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+/* Ritual screen: prevent background scroll while dragging */
+.ritual-screen {
+  overscroll-behavior: none;
+  touch-action: pan-y;
+}
+
+.ritual-screen .overflow-hidden {
+  overscroll-behavior: contain;
+}
+
+/* GPU-friendly scrolling on mobile */
+@media (max-width: 768px) {
+  .overflow-y-auto,
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Custom magical glow animations */
+@keyframes magical-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 10px rgba(212, 181, 232, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(212, 181, 232, 0.6));
+  }
+}
+
+.magical-glow {
+  animation: magical-glow 3s ease-in-out infinite;
+}
+
+/* Floating animation for particles */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  33% {
+    transform: translateY(-20px) translateX(10px);
+  }
+  66% {
+    transform: translateY(-10px) translateX(-10px);
+  }
+}
+
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Smooth scrolling */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Selection styling */
+::selection {
+  background-color: rgba(212, 181, 232, 0.3);
+  color: inherit;
+}
+
+/* Soft transitions for all interactive elements */
+button, a, input, textarea {
+  transition: all 0.3s ease;
+}
