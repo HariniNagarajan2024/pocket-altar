@@ -1,4 +1,4 @@
-import{h as Ce,t as Ie,u as j,r as U,e as D,o as v,D as Ne,p as _,H as Se}from"./index-rs77KIZC.js";import{M as V}from"./MagicalButton-BtedcH1x.js";import{a as Te}from"./spellsDatabase-Dmnw8ezl.js";import{D as Ee,g as Pe,d as je}from"./wallpaperGenerator-Cl9Iu0TD.js";/**
+import{h as Ce,t as Ie,u as j,r as U,e as D,o as v,D as Ne,p as _,H as Se}from"./index-CXq8bVKM.js";import{M as V}from"./MagicalButton-D9h-o1KR.js";import{a as Te}from"./spellsDatabase-Dmnw8ezl.js";import{D as Ee,g as Pe,d as je}from"./wallpaperGenerator-CymjYRdE.js";/**
  * @license lucide-react v0.487.0 - ISC
  *
  * This source code is licensed under the ISC license.

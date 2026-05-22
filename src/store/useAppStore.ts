@@ -246,8 +246,9 @@ export const useAppStore = create<AppState>()(
       },
       onRehydrateStorage: () => () => {
         const state = useAppStore.getState();
+        // Don't set authLoading here - let AuthProvider manage its own state
+        // This prevents race conditions between hydration and auth checks
         syncAudioFromPrefs(migratePreferences(state.preferences));
-        state.setAuthLoading(false);
       },
       partialize: (state) => ({
         user: state.user,

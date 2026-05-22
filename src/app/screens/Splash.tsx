@@ -12,7 +12,6 @@ export default function Splash() {
   const hydrated = useStoreHydrated();
   const user = useAppStore((s) => s.user);
   const onboardingComplete = useAppStore((s) => s.preferences.onboardingComplete);
-  const authLoading = useAppStore((s) => s.authLoading);
 
   const isReturningUser = Boolean(user && onboardingComplete);
   const splashMs = isReturningUser ? 900 : 2200;
@@ -24,12 +23,15 @@ export default function Splash() {
   }, [user, onboardingComplete]);
 
   useEffect(() => {
-    if (!hydrated || authLoading) return;
+    // Only wait for hydration, not authLoading
+    // authLoading can stay true indefinitely if auth checks hang
+    if (!hydrated) return;
+    
     const timer = setTimeout(() => {
       navigate(destination, { replace: true });
     }, splashMs);
     return () => clearTimeout(timer);
-  }, [hydrated, authLoading, navigate, destination, splashMs]);
+  }, [hydrated, navigate, destination, splashMs]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden bg-gradient-to-b from-[#e8d9f5] via-[#d4b5e8] to-[#f5d0d9]">

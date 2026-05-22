@@ -20,24 +20,50 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        setUser({
-          id: session.user.id,
-          email: session.user.email ?? "",
-          displayName:
-            session.user.user_metadata?.display_name ??
-            session.user.email?.split("@")[0] ??
-            "Magical Soul",
-          isGuest: false,
-        });
-      }
-      setAuthLoading(false);
+    let mounted = true;
+    let authTimeoutId: ReturnType<typeof setTimeout> | null = null;
+
+    // Set a timeout to ensure authLoading doesn't hang forever
+    const timeoutPromise = new Promise<null>((resolve) => {
+      authTimeoutId = setTimeout(() => {
+        if (mounted) {
+          console.warn("[Auth] getSession timeout - proceeding without session");
+          setAuthLoading(false);
+        }
+        resolve(null);
+      }, 3000); // 3 second timeout
     });
+
+    Promise.race([
+      supabase.auth.getSession(),
+      timeoutPromise,
+    ])
+      .then(({ data: { session } } = { data: { session: null } }) => {
+        if (!mounted) return;
+
+        if (session?.user) {
+          setUser({
+            id: session.user.id,
+            email: session.user.email ?? "",
+            displayName:
+              session.user.user_metadata?.display_name ??
+              session.user.email?.split("@")[0] ??
+              "Magical Soul",
+            isGuest: false,
+          });
+        }
+        setAuthLoading(false);
+      })
+      .catch((error) => {
+        if (!mounted) return;
+        console.error("[Auth] getSession error:", error);
+        setAuthLoading(false); // Ensure we don't stay stuck
+      });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!mounted) return;
       if (session?.user) {
         setUser({
           id: session.user.id,
@@ -51,7 +77,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      if (authTimeoutId) clearTimeout(authTimeoutId);
+      subscription.unsubscribe();
+    };
   }, [hydrated, setUser, setAuthLoading]);
 
   useEffect(() => {

@@ -2,8 +2,8 @@ import { lazy, Suspense } from "react";
 import { createBrowserRouter, Navigate } from "react-router";
 import { MagicalLoader } from "./components/MagicalLoader";
 import { AppShell } from "./components/layout/AppShell";
+import Splash from "./screens/Splash";
 
-const Splash = lazy(() => import("./screens/Splash"));
 const Onboarding = lazy(() => import("./screens/Onboarding"));
 const Homepage = lazy(() => import("./screens/Homepage"));
 const SpellDetail = lazy(() => import("./screens/SpellDetail"));
