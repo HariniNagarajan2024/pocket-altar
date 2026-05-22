@@ -4,8 +4,8 @@ A production-ready, mobile-first ritual and manifestation web app — cozy magic
 
 ## Features
 
-- **55+ curated spells** across 14 emotional categories
-- **Guided drag-and-drop rituals** with 8 reusable templates (candle, jar, tea, sigil, moon, crystal, sleep, focus)
+- **67 curated spells** across 14 emotional categories
+- **Guided drag-and-drop rituals** with spell-specific ingredient steps (candle, jar, tea, sigil, moon, crystal, sleep, focus)
 - **Procedural sigil generation** from your intentions
 - **Wallpaper export** (canvas-generated PNG downloads)
 - **Casted Spells archive** — local ritual history persistence
@@ -48,7 +48,7 @@ Open `http://localhost:5173`
 src/
   app/
     components/   # UI, layout, ritual engine
-    data/         # Spells, categories, ritual templates
+    data/         # Spells, categories, procedural ritual step generation
     lib/          # Sigil, audio, wallpaper utilities
     screens/      # All app routes
   store/          # Zustand global state

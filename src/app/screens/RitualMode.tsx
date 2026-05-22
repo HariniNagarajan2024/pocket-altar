@@ -1,7 +1,6 @@
 import { useEffect, useRef, lazy, Suspense } from "react";
 import { useNavigate, useParams } from "react-router";
-import { getSpellById } from "@/app/data/spells";
-import { getRitualSteps } from "@/app/data/ritualTemplates";
+import { getSpellById, getSpellRitualSteps } from "@/app/data/spells";
 import { DeferredParticles } from "../components/DeferredParticles";
 import { MagicalLoader } from "../components/MagicalLoader";
 import { useAppStore } from "@/store/useAppStore";
@@ -53,7 +52,7 @@ export default function RitualMode() {
     );
   }
 
-  const steps = getRitualSteps(spell.ritualType);
+  const steps = getSpellRitualSteps(spell);
 
   return (
     <div className="ritual-screen min-h-[100dvh] flex flex-col relative overflow-hidden bg-gradient-to-b from-[#faf8fc] to-[#f0ebf5] touch-pan-y">

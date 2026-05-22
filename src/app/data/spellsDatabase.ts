@@ -1,4 +1,4 @@
-import type { RitualType, Spell, SpellCategoryId } from "@/app/types";
+import type { RitualType, Spell, SpellCategoryId, RitualStep } from "@/app/types";
 
 const ritualByCategory: Record<SpellCategoryId, RitualType> = {
   love: "candle",
@@ -15,6 +15,82 @@ const ritualByCategory: Record<SpellCategoryId, RitualType> = {
   "self-worth": "sigil",
   "letting-go": "moon",
   luck: "spell-jar",
+};
+
+// Map ingredient names to icons for ritual visualization
+const ingredientIconMap: Record<string, string> = {
+  "Rose candle": "🕯️",
+  "Lavender petals": "🌸",
+  "Pink ribbon": "🎀",
+  "Heart charm": "💗",
+  "Golden candle": "🕯️",
+  "Honey jar": "🫙",
+  "Sunflower petals": "🌸",
+  "Mirror charm": "🪞",
+  "Moon water": "🌙",
+  "Lavender sprigs": "🌿",
+  "Blue candle": "🕯️",
+  "Star charm": "⭐",
+  "Chamomile": "🌿",
+  "Soft petals": "🌸",
+  "Lavender candle": "🕯️",
+  "Sleep sachet": "💜",
+  "Green tea": "🍵",
+  "Rosemary": "🌿",
+  "Yellow candle": "🕯️",
+  "Crystal quartz": "💎",
+  "Red thread": "🎀",
+  "Rose petals": "🌸",
+  "Rose quartz": "💎",
+  "Glass jar": "🫙",
+  "Calming herbs": "🌿",
+  "White sand": "⏳",
+  "Orange candle": "🕯️",
+  "Cinnamon": "🌰",
+  "Star anise": "⭐",
+  "Citrine": "💛",
+  "Mirror": "🪞",
+  "Flower petals": "🌸",
+  "Rose water": "💧",
+  "White candle": "🕯️",
+  "Sage": "🌿",
+  "Lavender oil": "🌿",
+  "Smooth stone": "🪨",
+  "Clover": "🍀",
+  "Green pouch": "🎁",
+  "Small coin": "💰",
+  "Bay leaf": "🌿",
+  "Purple candle": "🕯️",
+  "Artistic tools": "🎨",
+  "Flower essence": "🌺",
+  "Amethyst": "💜",
+  "Silver candle": "🕯️",
+  "Moonstone": "🌙",
+  "Chamomile tea": "🍵",
+  "Soft pillow": "🛏️",
+  "Salt circle": "⚪",
+  "Black tourmaline": "🖤",
+  "Paper": "📄",
+  "Dried flowers": "🌸",
+  "Butterfly charm": "🦋",
+  "Healing herbs": "🌿",
+  "Quartz": "💎",
+  "Jar": "🫙",
+  "Yellow ribbon": "🎀",
+  "Gold candle": "🕯️",
+  "Mint": "🌿",
+  "Planner charm": "📅",
+  "Tea": "🍵",
+  "Calm stone": "🪨",
+  "Candle": "🕯️",
+  "Petals": "🌸",
+  "Charm": "✨",
+  "Ribbon": "🎀",
+  "Pink candle": "🕯️",
+  "Lavender": "🪻",
+  "Citrus peel": "🍊",
+  "Clear quartz": "✨",
+  "Notebook": "📓",
 };
 
 const categoryMeta: Record<
@@ -37,8 +113,84 @@ const categoryMeta: Record<
   luck: { color: "#c9dac1", ambient: "shimmer", tags: ["hopeful", "lucky"] },
 };
 
+// Generate spell-specific ritual steps based on ingredients
+function generateSpellSteps(
+  spellId: string,
+  ingredients: string[],
+  ritualType: RitualType
+): RitualStep[] {
+  const getIcon = (ingredient: string) => ingredientIconMap[ingredient] || "✨";
+
+  // Build steps based on ritual type and ingredients
+  const steps: RitualStep[] = [];
+  let stepIndex = 0;
+
+  // Step 1: Place first ingredient
+  if (ingredients.length > 0) {
+    steps.push({
+      id: `${spellId}-s${stepIndex++}`,
+      instruction: `Place the ${ingredients[0]} at the center of your altar`,
+      itemType: ingredients[0],
+      icon: getIcon(ingredients[0]),
+      action: "drag",
+    });
+  }
+
+  // Step 2: Add second ingredient (if exists)
+  if (ingredients.length > 1) {
+    const verb = ingredients[1].includes("jar") || ingredients[1].includes("water") ? "pour" : "add";
+    steps.push({
+      id: `${spellId}-s${stepIndex++}`,
+      instruction: `${verb === "pour" ? "Pour" : "Scatter"} the ${ingredients[1]} with intention`,
+      itemType: ingredients[1],
+      icon: getIcon(ingredients[1]),
+      action: "drag",
+    });
+  }
+
+  // Step 3: Add third ingredient or write intention
+  if (ingredients.length > 2) {
+    steps.push({
+      id: `${spellId}-s${stepIndex++}`,
+      instruction: `Add the ${ingredients[2]} to complete the sequence`,
+      itemType: ingredients[2],
+      icon: getIcon(ingredients[2]),
+      action: "drag",
+    });
+  } else {
+    steps.push({
+      id: `${spellId}-s${stepIndex++}`,
+      instruction: `Write your intention with care`,
+      itemType: "intention",
+      icon: "✨",
+      action: "type",
+    });
+  }
+
+  // Step 4: Seal with final ingredient or ribbon
+  if (ingredients.length > 3) {
+    steps.push({
+      id: `${spellId}-s${stepIndex++}`,
+      instruction: `Seal the ritual with the ${ingredients[3]}`,
+      itemType: ingredients[3],
+      icon: getIcon(ingredients[3]),
+      action: "seal",
+    });
+  } else {
+    steps.push({
+      id: `${spellId}-s${stepIndex++}`,
+      instruction: `Seal your ritual and speak your affirmation`,
+      itemType: "seal",
+      icon: "⭐",
+      action: "seal",
+    });
+  }
+
+  return steps;
+}
+
 function makeSpell(
-  partial: Omit<Spell, "ritualType" | "emotionalTags" | "steps" | "wallpaperTheme" | "sigilStyle" | "ambientSound"> & {
+  partial: Omit<Spell, "ritualType" | "emotionalTags" | "wallpaperTheme" | "sigilStyle" | "ambientSound"> & {
     ritualType?: RitualType;
   }
 ): Spell {
@@ -49,12 +201,6 @@ function makeSpell(
     ...partial,
     ritualType,
     emotionalTags: meta.tags,
-    steps: [
-      "Prepare your sacred space with a deep breath",
-      "Follow each guided interaction with intention",
-      "Speak your affirmation softly",
-      "Seal the ritual and carry its glow with you",
-    ],
     wallpaperTheme: partial.category,
     sigilStyle: "floral-geometric",
     ambientSound: meta.ambient,
@@ -168,4 +314,9 @@ export function getRecommendedSpells(count = 4): Spell[] {
     return ha - hb;
   });
   return shuffled.slice(0, count);
+}
+
+// Generate spell-specific ritual steps instead of using generic templates
+export function getSpellRitualSteps(spell: Spell): RitualStep[] {
+  return generateSpellSteps(spell.id, spell.ingredients, spell.ritualType);
 }

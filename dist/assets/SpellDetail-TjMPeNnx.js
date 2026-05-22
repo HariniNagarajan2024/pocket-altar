@@ -1,4 +1,4 @@
-import{j as e,m as a}from"./motion-BGwmj_mJ.js";import{i as o,m as d,l as c,F as m,H as x,S as r,M as b}from"./index-B2BrhXQZ.js";import{s as p}from"./spellsDatabase-Dmnw8ezl.js";import{A as h}from"./arrow-left-CXrXYp_I.js";import"./radix-9Vj4kdVU.js";/**
+import{j as e,m as a}from"./motion-BGwmj_mJ.js";import{i as o,m as d,l as c,F as m,H as x,S as r,M as b}from"./index-BM16JphF.js";import{s as p}from"./spellsDatabase-4i1l3l1j.js";import{A as h}from"./arrow-left-C08XQt78.js";import"./radix-9Vj4kdVU.js";/**
  * @license lucide-react v0.487.0 - ISC
  *
  * This source code is licensed under the ISC license.

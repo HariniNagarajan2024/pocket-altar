@@ -45,7 +45,6 @@ export interface Spell {
   ingredients: string[];
   ritualType: RitualType;
   emotionalTags: string[];
-  steps: string[];
   wallpaperTheme: string;
   sigilStyle: string;
   ambientSound: string;
