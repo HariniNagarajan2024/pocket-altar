@@ -53,19 +53,24 @@ class AudioManager {
 
   private ensureContext() {
     if (!this.ctx) {
-      this.ctx = new AudioContext();
-      this.masterGain = this.ctx.createGain();
-      this.ambienceBus = this.ctx.createGain();
-      this.sfxBus = this.ctx.createGain();
-      this.musicBus = this.ctx.createGain();
+      try {
+        this.ctx = new AudioContext();
+        this.masterGain = this.ctx.createGain();
+        this.ambienceBus = this.ctx.createGain();
+        this.sfxBus = this.ctx.createGain();
+        this.musicBus = this.ctx.createGain();
 
-      this.ambienceBus.connect(this.masterGain);
-      this.sfxBus.connect(this.masterGain);
-      this.musicBus.connect(this.masterGain);
-      this.masterGain.connect(this.ctx.destination);
-      this.applySettings(this.settings);
+        this.ambienceBus.connect(this.masterGain);
+        this.sfxBus.connect(this.masterGain);
+        this.musicBus.connect(this.masterGain);
+        this.masterGain.connect(this.ctx.destination);
+        this.applySettings(this.settings);
+      } catch (e) {
+        console.warn("[Audio] Failed to create AudioContext:", e);
+        return;
+      }
     }
-    if (this.ctx.state === "suspended" && this.unlocked) {
+    if (this.ctx && this.ctx.state === "suspended" && this.unlocked) {
       void this.ctx.resume();
     }
   }

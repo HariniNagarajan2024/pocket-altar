@@ -4,23 +4,23 @@ import { useAppStore } from "@/store/useAppStore";
 
 /** Keeps Web Audio in sync with persisted preferences */
 export function AudioProvider({ children }: { children: ReactNode }) {
-  const soundEnabled = useAppStore((s) => s.preferences.soundEnabled);
-  const ambienceVolume = useAppStore((s) => s.preferences.ambienceVolume);
-  const effectsVolume = useAppStore((s) => s.preferences.effectsVolume);
-  const musicVolume = useAppStore((s) => s.preferences.musicVolume);
-  const soundVolume = useAppStore((s) => s.preferences.soundVolume);
+  const soundSettings = useAppStore((s) => ({
+    soundEnabled: s.preferences.soundEnabled,
+    soundVolume: s.preferences.soundVolume,
+    ambienceVolume: s.preferences.ambienceVolume,
+    effectsVolume: s.preferences.effectsVolume,
+    musicVolume: s.preferences.musicVolume,
+  }), (a, b) =>
+    a.soundEnabled === b.soundEnabled &&
+    a.soundVolume === b.soundVolume &&
+    a.ambienceVolume === b.ambienceVolume &&
+    a.effectsVolume === b.effectsVolume &&
+    a.musicVolume === b.musicVolume
+  );
 
   useEffect(() => {
-    audioManager.applySettings(
-      preferencesToSoundSettings({
-        soundEnabled,
-        soundVolume,
-        ambienceVolume,
-        effectsVolume,
-        musicVolume,
-      })
-    );
-  }, [soundEnabled, ambienceVolume, effectsVolume, musicVolume, soundVolume]);
+    audioManager.applySettings(preferencesToSoundSettings(soundSettings));
+  }, [soundSettings]);
 
   useEffect(() => {
     const unlock = () => audioManager.unlock();

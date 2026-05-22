@@ -2,7 +2,6 @@ import { motion } from "motion/react";
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { DeferredParticles } from "../components/DeferredParticles";
-import { MagicalLoader } from "../components/MagicalLoader";
 import { Sparkles } from "lucide-react";
 import { useAppStore } from "@/store/useAppStore";
 import { useStoreHydrated } from "@/app/hooks/useStoreHydrated";
@@ -23,10 +22,8 @@ export default function Splash() {
   }, [user, onboardingComplete]);
 
   useEffect(() => {
-    // Only wait for hydration, not authLoading
-    // authLoading can stay true indefinitely if auth checks hang
     if (!hydrated) return;
-    
+
     const timer = setTimeout(() => {
       navigate(destination, { replace: true });
     }, splashMs);
@@ -55,6 +52,7 @@ export default function Splash() {
             ],
           }}
           transition={{ duration: 2.5, repeat: Infinity }}
+          style={{ willChange: "filter" }}
         >
           <Sparkles size={isReturningUser ? 44 : 56} className="text-white mx-auto mb-5" />
         </motion.div>
@@ -77,14 +75,24 @@ export default function Splash() {
       </motion.div>
 
       <motion.div className="absolute bottom-14 flex gap-2">
-        {[0, 1, 2].map((i) => (
-          <motion.div
-            key={i}
-            className="w-2 h-2 rounded-full bg-white"
-            animate={{ scale: [1, 1.4, 1], opacity: [0.4, 1, 0.4] }}
-            transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }}
-          />
-        ))}
+        <motion.div
+          className="w-2 h-2 rounded-full bg-white"
+          animate={{ scale: [1, 1.4, 1], opacity: [0.4, 1, 0.4] }}
+          transition={{ duration: 1.2, repeat: Infinity }}
+          style={{ willChange: "transform, opacity" }}
+        />
+        <motion.div
+          className="w-2 h-2 rounded-full bg-white"
+          animate={{ scale: [1, 1.4, 1], opacity: [0.4, 1, 0.4] }}
+          transition={{ duration: 1.2, repeat: Infinity, delay: 0.2 }}
+          style={{ willChange: "transform, opacity" }}
+        />
+        <motion.div
+          className="w-2 h-2 rounded-full bg-white"
+          animate={{ scale: [1, 1.4, 1], opacity: [0.4, 1, 0.4] }}
+          transition={{ duration: 1.2, repeat: Infinity, delay: 0.4 }}
+          style={{ willChange: "transform, opacity" }}
+        />
       </motion.div>
     </div>
   );

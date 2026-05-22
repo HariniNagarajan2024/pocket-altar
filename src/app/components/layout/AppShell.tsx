@@ -1,9 +1,10 @@
+import { memo } from "react";
 import { Outlet } from "react-router";
 import { BottomNav } from "./BottomNav";
 import { DeferredParticles } from "../DeferredParticles";
 import { useAppStore, altarThemes } from "@/store/useAppStore";
 
-export function AppShell() {
+function AppShellInner() {
   const theme = useAppStore((s) => s.preferences.altarTheme);
   const themeConfig = altarThemes[theme];
 
@@ -17,3 +18,5 @@ export function AppShell() {
     </div>
   );
 }
+
+export const AppShell = memo(AppShellInner);

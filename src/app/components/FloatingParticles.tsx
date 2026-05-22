@@ -27,7 +27,7 @@ function FloatingParticlesInner({
   const reducedMotion =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  
+
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
   const mobileCount = isMobile ? Math.floor(count * 0.6) : count;
   const cappedCount = Math.min(mobileCount, reducedMotion ? 0 : count);
@@ -62,6 +62,7 @@ function FloatingParticlesInner({
           style={{
             left: `${particle.x}%`,
             top: `${particle.y}%`,
+            willChange: "transform, opacity",
           }}
           animate={{
             y: [0, -24, 0],

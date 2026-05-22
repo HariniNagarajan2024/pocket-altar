@@ -9,22 +9,64 @@ import {
   getRecommendedSpells,
 } from "../data/spells";
 import { Sparkles, Play } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, memo, useCallback } from "react";
 import { useAppStore } from "@/store/useAppStore";
 
-export default function Homepage() {
+interface SpellCardProps {
+  spell: typeof spells[0];
+  onClick: (id: string) => void;
+}
+
+const SpellCard = memo(({ spell, onClick }: SpellCardProps) => (
+  <motion.button
+    whileTap={{ scale: 0.98 }}
+    onClick={() => onClick(spell.id)}
+    className="text-left rounded-3xl p-4 border border-white/50 shadow-sm relative overflow-hidden"
+    style={{ background: `linear-gradient(135deg, ${spell.color}15, ${spell.color}35)` }}
+  >
+    <motion.span
+      className="absolute right-2 top-2 text-5xl opacity-[0.08]"
+      animate={{ rotate: [0, 6, -6, 0] }}
+      transition={{ duration: 5, repeat: Infinity }}
+      style={{ willChange: "transform" }}
+    >
+      {spell.icon}
+    </motion.span>
+    <div className="flex gap-3 relative z-10">
+      <span
+        className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0"
+        style={{ background: `${spell.color}50` }}
+      >
+        {spell.icon}
+      </span>
+      <div className="min-w-0 flex-1">
+        <h3 className="font-semibold text-[#4a4458] truncate">{spell.name}</h3>
+        <p className="text-xs text-[#8a7d9e] line-clamp-1">{spell.description}</p>
+        <div className="flex gap-2 mt-1 text-[10px] text-[#8a7d9e]">
+          <span>{spell.duration}</span>
+          <span>·</span>
+          <span>{spell.emotionalTags[0]}</span>
+        </div>
+      </div>
+    </div>
+  </motion.button>
+));
+
+SpellCard.displayName = "SpellCard";
+
+function HomepageInner() {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const user = useAppStore((s) => s.user);
   const activeSession = useAppStore((s) => s.activeSession);
   const castedSpells = useAppStore((s) => s.castedSpells);
-  
+
   const moon = useMemo(() => getMoonPhase(), []);
   const affirmation = useMemo(() => getDailyAffirmation(), []);
   const recommended = useMemo(() => getRecommendedSpells(3), []);
   const dailySpell = useMemo(() => recommended[0] ?? spells[0], [recommended]);
 
-  const filteredSpells = useMemo(() => 
+  const filteredSpells = useMemo(() =>
     selectedCategory
       ? spells.filter((s) => s.category === selectedCategory)
       : spells.slice(0, 12),
@@ -38,6 +80,14 @@ export default function Homepage() {
       : null,
     [activeSession]
   );
+
+  const handleSpellClick = useCallback((id: string) => {
+    navigate(`/spell/${id}`);
+  }, [navigate]);
+
+  const handleCategorySelect = useCallback((category: string | null) => {
+    setSelectedCategory(category);
+  }, []);
 
   return (
     <div className="min-h-screen pb-28 relative overflow-hidden">
@@ -56,6 +106,7 @@ export default function Homepage() {
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/70 border border-[#d4b5e8]/20 text-sm"
             animate={{ y: [0, -3, 0] }}
             transition={{ duration: 4, repeat: Infinity }}
+            style={{ willChange: "transform" }}
           >
             <span>{moon.icon}</span>
             <span className="text-[#4a4458] text-xs">{moon.name}</span>
@@ -73,6 +124,7 @@ export default function Homepage() {
             className="absolute -right-4 -top-4 opacity-20"
             animate={{ rotate: 360 }}
             transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
+            style={{ willChange: "transform" }}
           >
             <Sparkles size={100} />
           </motion.div>
@@ -134,7 +186,7 @@ export default function Homepage() {
           <h2 className="text-lg font-semibold text-[#4a4458] mb-3">Spell categories</h2>
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-1 px-1">
             <button
-              onClick={() => setSelectedCategory(null)}
+              onClick={() => handleCategorySelect(null)}
               className={`shrink-0 px-4 py-2 rounded-full text-sm ${!selectedCategory ? "bg-[#d4b5e8] text-white" : "bg-white/60 text-[#4a4458]"}`}
             >
               All
@@ -143,7 +195,7 @@ export default function Homepage() {
               <motion.button
                 key={cat.id}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setSelectedCategory(cat.id)}
+                onClick={() => handleCategorySelect(cat.id)}
                 className={`shrink-0 px-4 py-2 rounded-full text-sm flex items-center gap-1 ${
                   selectedCategory === cat.id ? "text-white shadow-md" : "bg-white/60 text-[#4a4458]"
                 }`}
@@ -163,42 +215,12 @@ export default function Homepage() {
               : "Recommended rituals"}
           </h2>
           <div className="grid grid-cols-1 gap-3">
-            {filteredSpells.map((spell, i) => (
-              <motion.button
+            {filteredSpells.map((spell) => (
+              <SpellCard
                 key={spell.id}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.03 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => navigate(`/spell/${spell.id}`)}
-                className="text-left rounded-3xl p-4 border border-white/50 shadow-sm relative overflow-hidden"
-                style={{ background: `linear-gradient(135deg, ${spell.color}15, ${spell.color}35)` }}
-              >
-                <motion.span
-                  className="absolute right-2 top-2 text-5xl opacity-[0.08]"
-                  animate={{ rotate: [0, 6, -6, 0] }}
-                  transition={{ duration: 5, repeat: Infinity }}
-                >
-                  {spell.icon}
-                </motion.span>
-                <div className="flex gap-3 relative z-10">
-                  <span
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0"
-                    style={{ background: `${spell.color}50` }}
-                  >
-                    {spell.icon}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-[#4a4458] truncate">{spell.name}</h3>
-                    <p className="text-xs text-[#8a7d9e] line-clamp-1">{spell.description}</p>
-                    <div className="flex gap-2 mt-1 text-[10px] text-[#8a7d9e]">
-                      <span>{spell.duration}</span>
-                      <span>·</span>
-                      <span>{spell.emotionalTags[0]}</span>
-                    </div>
-                  </div>
-                </div>
-              </motion.button>
+                spell={spell}
+                onClick={handleSpellClick}
+              />
             ))}
           </div>
           {!selectedCategory && (
@@ -214,3 +236,5 @@ export default function Homepage() {
     </div>
   );
 }
+
+export default memo(HomepageInner);

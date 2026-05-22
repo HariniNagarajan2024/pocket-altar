@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState, memo } from "react";
 import type { ComponentProps } from "react";
 
 const FloatingParticles = lazy(() =>
@@ -10,7 +10,7 @@ type Props = ComponentProps<typeof FloatingParticles> & {
 };
 
 /** Delays decorative particles until after first paint */
-export function DeferredParticles({ delayMs = 400, ...props }: Props) {
+function DeferredParticlesInner({ delayMs = 400, ...props }: Props) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -28,3 +28,5 @@ export function DeferredParticles({ delayMs = 400, ...props }: Props) {
     </Suspense>
   );
 }
+
+export const DeferredParticles = memo(DeferredParticlesInner);

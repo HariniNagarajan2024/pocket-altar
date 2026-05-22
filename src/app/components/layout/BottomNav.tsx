@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { motion } from "motion/react";
 import { NavLink } from "react-router";
 import { Home, Sparkles, BookHeart, Image, User } from "lucide-react";
@@ -10,7 +11,7 @@ const navItems = [
   { to: "/profile", label: "Profile", icon: User },
 ];
 
-export function BottomNav() {
+function BottomNavInner() {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-30 px-4 pt-2 pointer-events-none safe-bottom">
       <div className="max-w-md mx-auto pointer-events-auto">
@@ -20,16 +21,15 @@ export function BottomNav() {
               {({ isActive }) => (
                 <>
                   {isActive && (
-                    <motion.div
-                      layoutId="nav-glow"
+                    <div
                       className="absolute -inset-1 rounded-2xl bg-[#d4b5e8]/25"
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
                     />
                   )}
                   <motion.span
                     className="relative z-10"
                     whileTap={{ scale: 0.9 }}
                     animate={isActive ? { y: -2 } : { y: 0 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   >
                     <Icon
                       size={22}
@@ -53,3 +53,5 @@ export function BottomNav() {
     </nav>
   );
 }
+
+export const BottomNav = memo(BottomNavInner);
