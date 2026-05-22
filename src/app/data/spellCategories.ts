@@ -33,24 +33,6 @@ export const dailyAffirmations = [
   "I carry light within me wherever I go",
 ];
 
-export function getMoonPhase(): { name: string; icon: string } {
-  const phases = [
-    { name: "New Moon", icon: "🌑" },
-    { name: "Waxing Crescent", icon: "🌒" },
-    { name: "First Quarter", icon: "🌓" },
-    { name: "Waxing Gibbous", icon: "🌔" },
-    { name: "Full Moon", icon: "🌕" },
-    { name: "Waning Gibbous", icon: "🌖" },
-    { name: "Last Quarter", icon: "🌗" },
-    { name: "Waning Crescent", icon: "🌘" },
-  ];
-  const day = Math.floor(
-    (Date.now() - new Date(new Date().getFullYear(), 0, 1).getTime()) /
-      (1000 * 60 * 60 * 24)
-  );
-  return phases[day % phases.length];
-}
-
 export function getDailyAffirmation(): string {
   const day = new Date().getDate();
   return dailyAffirmations[day % dailyAffirmations.length];

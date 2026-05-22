@@ -4,7 +4,6 @@ import { FloatingParticles } from "../components/FloatingParticles";
 import { Sparkles, Calendar, Heart, Settings, LogOut } from "lucide-react";
 import { useAppStore, computeStreak, getFavoriteCategory, altarThemes } from "@/store/useAppStore";
 import { spellCategories } from "@/app/data/spells";
-import { signOut } from "@/app/services/authService";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -13,6 +12,7 @@ export default function Profile() {
   const savedSigils = useAppStore((s) => s.savedSigils);
   const wallpapers = useAppStore((s) => s.wallpapers);
   const preferences = useAppStore((s) => s.preferences);
+  const setUser = useAppStore((s) => s.setUser);
   const theme = altarThemes[preferences.altarTheme];
 
   const streak = computeStreak(castedSpells.map((r) => r.date));
@@ -21,9 +21,9 @@ export default function Profile() {
     ? spellCategories.find((c) => c.id === favoriteCatId)?.name ?? "Magic"
     : "Begin your practice";
 
-  const handleLogout = async () => {
-    await signOut();
-    navigate("/login");
+  const handleLogout = () => {
+    setUser(null);
+    navigate("/", { replace: true });
   };
 
   return (

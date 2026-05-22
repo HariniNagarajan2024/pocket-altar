@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import { createBrowserRouter, Navigate } from "react-router";
 import { MagicalLoader } from "./components/MagicalLoader";
 import { AppShell } from "./components/layout/AppShell";
-import Splash from "./screens/Splash";
+import Welcome from "./screens/Welcome";
 
 const Onboarding = lazy(() => import("./screens/Onboarding"));
 const Homepage = lazy(() => import("./screens/Homepage"));
@@ -14,9 +14,6 @@ const CastedSpells = lazy(() => import("./screens/CastedSpells"));
 const Profile = lazy(() => import("./screens/Profile"));
 const DailyRituals = lazy(() => import("./screens/DailyRituals"));
 const Settings = lazy(() => import("./screens/Settings"));
-const Login = lazy(() => import("./screens/auth/Login"));
-const SignUp = lazy(() => import("./screens/auth/SignUp"));
-const ForgotPassword = lazy(() => import("./screens/auth/ForgotPassword"));
 const Wallpapers = lazy(() => import("./screens/Wallpapers"));
 const RitualsCatalog = lazy(() => import("./screens/RitualsCatalog"));
 
@@ -29,31 +26,7 @@ export const router = createBrowserRouter([
     path: "/",
     element: (
       <LazyScreen>
-        <Splash />
-      </LazyScreen>
-    ),
-  },
-  {
-    path: "/login",
-    element: (
-      <LazyScreen>
-        <Login />
-      </LazyScreen>
-    ),
-  },
-  {
-    path: "/signup",
-    element: (
-      <LazyScreen>
-        <SignUp />
-      </LazyScreen>
-    ),
-  },
-  {
-    path: "/forgot-password",
-    element: (
-      <LazyScreen>
-        <ForgotPassword />
+        <Welcome />
       </LazyScreen>
     ),
   },

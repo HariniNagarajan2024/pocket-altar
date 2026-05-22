@@ -8,9 +8,8 @@ A production-ready, mobile-first ritual and manifestation web app — cozy magic
 - **Guided drag-and-drop rituals** with 8 reusable templates (candle, jar, tea, sigil, moon, crystal, sleep, focus)
 - **Procedural sigil generation** from your intentions
 - **Wallpaper export** (canvas-generated PNG downloads)
-- **Casted Spells archive** — only real user ritual history
-- **Supabase auth** (sign up, login, password reset, guest mode)
-- **Zustand + localStorage** persistence with optional cloud sync
+- **Casted Spells archive** — local ritual history persistence
+- **Zustand + localStorage** persistence with full offline support
 - **Ambient audio** (Web Audio API drones + interaction chimes)
 - **5 altar themes** from onboarding
 - **Mobile-first UI** with floating bottom navigation
@@ -23,7 +22,6 @@ A production-ready, mobile-first ritual and manifestation web app — cozy magic
 - React Router 7
 - React DnD
 - Zustand
-- Supabase
 - shadcn/ui primitives
 
 ## Quick Start
@@ -35,15 +33,6 @@ npm run dev
 ```
 
 Open `http://localhost:5173`
-
-## Supabase Setup (optional)
-
-1. Create a project at [supabase.com](https://supabase.com)
-2. Copy `.env.example` to `.env` and add your keys
-3. Run `supabase/schema.sql` in the SQL editor
-4. Enable Email auth in Supabase dashboard
-
-Without Supabase, the app runs in **guest mode** with full local persistence.
 
 ## Scripts
 
@@ -62,9 +51,7 @@ src/
     data/         # Spells, categories, ritual templates
     lib/          # Sigil, audio, wallpaper utilities
     screens/      # All app routes
-    services/     # Auth
   store/          # Zustand global state
-  lib/            # Supabase client
 ```
 
 ## Design

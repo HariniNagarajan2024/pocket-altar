@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Remove-Item -Force -Recurse \"C:\\\\Users\\\\briha\\\\OneDrive\\\\Desktop\\\\Pocket Altar\\\\src\\\\app\\\\screens\\\\auth\" -ErrorAction SilentlyContinue)",
+      "Bash(Remove-Item -Force \"C:\\\\Users\\\\briha\\\\OneDrive\\\\Desktop\\\\Pocket Altar\\\\src\\\\app\\\\providers\\\\AuthProvider.tsx\" -ErrorAction SilentlyContinue)",
+      "Bash(Remove-Item -Force \"C:\\\\Users\\\\briha\\\\OneDrive\\\\Desktop\\\\Pocket Altar\\\\src\\\\app\\\\services\\\\authService.ts\" -ErrorAction SilentlyContinue)",
+      "Bash(Remove-Item -Force \"C:\\\\Users\\\\briha\\\\OneDrive\\\\Desktop\\\\Pocket Altar\\\\src\\\\lib\\\\supabase.ts\" -ErrorAction SilentlyContinue)",
+      "Bash(Write-Host \"Deleted auth files successfully\")",
+      "Bash(npm run *)",
+      "Bash(Start-Sleep -Seconds 3)",
+      "Bash(netstat -ano)",
+      "Bash(Select-String \"5174\")"
+    ]
+  }
+}

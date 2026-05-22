@@ -44,7 +44,6 @@ export default defineConfig({
             '@radix-ui/react-tooltip',
           ],
           'mui': ['@mui/material', '@mui/icons-material'],
-          'supabase': ['@supabase/supabase-js'],
         }
       }
     }

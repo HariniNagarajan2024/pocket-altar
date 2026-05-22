@@ -9,7 +9,6 @@ import type {
   UserPreferences,
   WallpaperData,
 } from "@/app/types";
-import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
 import { audioManager, preferencesToSoundSettings } from "@/app/lib/audioManager";
 
 export interface AuthUser {
@@ -21,7 +20,6 @@ export interface AuthUser {
 
 interface AppState {
   user: AuthUser | null;
-  authLoading: boolean;
   preferences: UserPreferences;
   castedSpells: CastedSpellRecord[];
   savedSigils: SigilData[];
@@ -33,7 +31,6 @@ interface AppState {
   pendingSigil: SigilData | null;
 
   setUser: (user: AuthUser | null) => void;
-  setAuthLoading: (loading: boolean) => void;
   setPreferences: (prefs: Partial<UserPreferences>) => void;
   updateTheme: (theme: AltarThemeId) => void;
   updateSoundPreferences: (prefs: Partial<Pick<UserPreferences, "soundEnabled" | "ambienceVolume" | "effectsVolume" | "musicVolume" | "ambientSound">>) => void;
@@ -47,8 +44,6 @@ interface AppState {
   setCurrentSpellId: (id: string | null) => void;
   setCurrentIntention: (intention: string) => void;
   setPendingSigil: (sigil: SigilData | null) => void;
-  hydrateFromCloud: () => Promise<void>;
-  syncToCloud: () => Promise<void>;
   resetGuestData: () => void;
 }
 
@@ -85,7 +80,6 @@ export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
       user: null,
-      authLoading: true,
       preferences: defaultPreferences,
       castedSpells: [],
       savedSigils: [],
@@ -97,7 +91,6 @@ export const useAppStore = create<AppState>()(
       pendingSigil: null,
 
       setUser: (user) => set({ user }),
-      setAuthLoading: (authLoading) => set({ authLoading }),
 
       setPreferences: (prefs) => {
         set((s) => {
@@ -105,14 +98,12 @@ export const useAppStore = create<AppState>()(
           syncAudioFromPrefs(next);
           return { preferences: next };
         });
-        get().syncToCloud();
       },
 
       updateTheme: (altarTheme) => {
         set((s) => ({
           preferences: { ...s.preferences, altarTheme },
         }));
-        get().syncToCloud();
       },
 
       updateSoundPreferences: (prefs) => {
@@ -121,14 +112,12 @@ export const useAppStore = create<AppState>()(
           syncAudioFromPrefs(next);
           return { preferences: next };
         });
-        get().syncToCloud();
       },
 
       updateRitualPreferences: (favoriteCategories) => {
         set((s) => ({
           preferences: { ...s.preferences, favoriteCategories },
         }));
-        get().syncToCloud();
       },
 
       completeOnboarding: (prefs) => {
@@ -141,7 +130,6 @@ export const useAppStore = create<AppState>()(
           syncAudioFromPrefs(next);
           return { preferences: next };
         });
-        get().syncToCloud();
       },
 
       addCastedSpell: (record) => {
@@ -150,7 +138,6 @@ export const useAppStore = create<AppState>()(
           id: crypto.randomUUID(),
         };
         set((s) => ({ castedSpells: [entry, ...s.castedSpells] }));
-        get().syncToCloud();
       },
 
       saveSigil: (sigil) =>
@@ -174,53 +161,6 @@ export const useAppStore = create<AppState>()(
       setCurrentSpellId: (currentSpellId) => set({ currentSpellId }),
       setCurrentIntention: (currentIntention) => set({ currentIntention }),
       setPendingSigil: (pendingSigil) => set({ pendingSigil }),
-
-      hydrateFromCloud: async () => {
-        const supabase = getSupabase();
-        const { user } = get();
-        if (!supabase || !user || user.isGuest) return;
-
-        const { data } = await supabase
-          .from("user_data")
-          .select("payload")
-          .eq("user_id", user.id)
-          .maybeSingle();
-
-        if (data?.payload) {
-          const p = data.payload as Partial<AppState>;
-          const preferences = migratePreferences(p.preferences);
-          syncAudioFromPrefs(preferences);
-          set({
-            preferences,
-            castedSpells: p.castedSpells ?? [],
-            savedSigils: p.savedSigils ?? [],
-            wallpapers: p.wallpapers ?? [],
-            favoriteSpellIds: p.favoriteSpellIds ?? [],
-          });
-        }
-      },
-
-      syncToCloud: async () => {
-        const supabase = getSupabase();
-        const { user, preferences, castedSpells, savedSigils, wallpapers, favoriteSpellIds } =
-          get();
-        if (!supabase || !user || user.isGuest) return;
-
-        await supabase.from("user_data").upsert(
-          {
-            user_id: user.id,
-            payload: {
-              preferences,
-              castedSpells,
-              savedSigils,
-              wallpapers,
-              favoriteSpellIds,
-            },
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: "user_id" }
-        );
-      },
 
       resetGuestData: () =>
         set({
@@ -246,8 +186,6 @@ export const useAppStore = create<AppState>()(
       },
       onRehydrateStorage: () => () => {
         const state = useAppStore.getState();
-        // Don't set authLoading here - let AuthProvider manage its own state
-        // This prevents race conditions between hydration and auth checks
         syncAudioFromPrefs(migratePreferences(state.preferences));
       },
       partialize: (state) => ({

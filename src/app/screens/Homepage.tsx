@@ -5,7 +5,6 @@ import {
   spells,
   spellCategories,
   getDailyAffirmation,
-  getMoonPhase,
   getRecommendedSpells,
 } from "../data/spells";
 import { Sparkles, Play } from "lucide-react";
@@ -61,7 +60,6 @@ function HomepageInner() {
   const activeSession = useAppStore((s) => s.activeSession);
   const castedSpells = useAppStore((s) => s.castedSpells);
 
-  const moon = useMemo(() => getMoonPhase(), []);
   const affirmation = useMemo(() => getDailyAffirmation(), []);
   const recommended = useMemo(() => getRecommendedSpells(3), []);
   const dailySpell = useMemo(() => recommended[0] ?? spells[0], [recommended]);
@@ -95,22 +93,11 @@ function HomepageInner() {
       <DeferredParticles type="sparkles" count={4} delayMs={500} />
 
       <div className="sticky top-0 z-20 backdrop-blur-md bg-white/55 border-b border-[#d4b5e8]/15 px-5 py-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-xs text-[#8a7d9e]">Your altar</p>
-            <h1 className="text-xl font-semibold text-[#4a4458]">
-              Hello, {user?.displayName?.split(" ")[0] ?? "dear one"} ✨
-            </h1>
-          </div>
-          <motion.div
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/70 border border-[#d4b5e8]/20 text-sm"
-            animate={{ y: [0, -3, 0] }}
-            transition={{ duration: 4, repeat: Infinity }}
-            style={{ willChange: "transform" }}
-          >
-            <span>{moon.icon}</span>
-            <span className="text-[#4a4458] text-xs">{moon.name}</span>
-          </motion.div>
+        <div>
+          <p className="text-xs text-[#8a7d9e]">Your altar</p>
+          <h1 className="text-xl font-semibold text-[#4a4458]">
+            Hello, {user?.displayName?.split(" ")[0] ?? "dear one"} ✨
+          </h1>
         </div>
       </div>
 
