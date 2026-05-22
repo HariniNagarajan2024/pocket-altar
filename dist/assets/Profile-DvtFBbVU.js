@@ -1,4 +1,4 @@
-import{h as p,t as N,u as i,d as v,g as w,j as k,o as e,p as r,S}from"./index-BI7VRnf0.js";import{F as x,H as C}from"./FloatingParticles--gzHw_ch.js";import"./spellsDatabase-Dmnw8ezl.js";import{s as m}from"./spellCategories-CjPRufPe.js";import{a as $}from"./authService-BsfsSrg-.js";import{C as z}from"./calendar-CdN1rJln.js";/**
+import{h as p,t as N,u as i,d as v,g as w,j as k,o as e,p as r,S}from"./index-Dw_HW5Kf.js";import{F as x,H as C}from"./FloatingParticles-Dhy8scIr.js";import"./spellsDatabase-Dmnw8ezl.js";import{s as m}from"./spellCategories-CjPRufPe.js";import{a as $}from"./authService-DiY59VSS.js";import{C as z}from"./calendar-B8Gj65WS.js";/**
  * @license lucide-react v0.487.0 - ISC
  *
  * This source code is licensed under the ISC license.

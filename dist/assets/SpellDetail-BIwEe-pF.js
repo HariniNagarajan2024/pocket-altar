@@ -1,4 +1,4 @@
-import{h as o,v as d,t as c,o as e,p as a,S as r}from"./index-BI7VRnf0.js";import{s as m}from"./spellsDatabase-Dmnw8ezl.js";import{M as x}from"./MagicalButton-D7v9T5_t.js";import{F as p,H as b}from"./FloatingParticles--gzHw_ch.js";import{A as h}from"./arrow-left-ynVKtagc.js";/**
+import{h as o,v as d,t as c,o as e,p as a,S as r}from"./index-Dw_HW5Kf.js";import{s as m}from"./spellsDatabase-Dmnw8ezl.js";import{M as x}from"./MagicalButton-Cgmt2jvr.js";import{F as p,H as b}from"./FloatingParticles-Dhy8scIr.js";import{A as h}from"./arrow-left-C5MC6SHx.js";/**
  * @license lucide-react v0.487.0 - ISC
  *
  * This source code is licensed under the ISC license.

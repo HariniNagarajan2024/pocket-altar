@@ -1,4 +1,4 @@
-import{h as r,t as d,o as e,S as l,p as m}from"./index-BI7VRnf0.js";import{g as x}from"./spellsDatabase-Dmnw8ezl.js";import{F as p,M as h}from"./FloatingParticles--gzHw_ch.js";/**
+import{h as r,t as d,o as e,S as l,p as m}from"./index-Dw_HW5Kf.js";import{g as x}from"./spellsDatabase-Dmnw8ezl.js";import{F as p,M as h}from"./FloatingParticles-Dhy8scIr.js";/**
  * @license lucide-react v0.487.0 - ISC
  *
  * This source code is licensed under the ISC license.
